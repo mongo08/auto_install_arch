@@ -119,14 +119,23 @@ verify_installation()
 
 mount_disk()
 {
-    (echo d; echo g; echo n; echo 1; echo 2048 ;echo +32G; echo w) | fdisk /dev/sda
-    # cfdisk -z /dev/sda 
-    mkfs.ext4 /dev/sda -L 'Arch'
+    umount /dev/sda
+    (echo d; echo g; echo n; echo; echo; echo +29G; echo w) | fdisk /dev/sda
+    echo "######################################"
+    echo "#      Разметка диска ожидайте       #"
+    echo "######################################"
+    sleep 30
+    (echo 'y') | mkfs.ext4 /dev/sda 
+    echo "######################################"
+    echo "#   Форматирование диска ожидайте    #"
+    echo "######################################"
+    sleep 30
     mount /dev/sda /mnt
 }
 
 main()
 {
+    setfont cyr-sun16
     mount_disk
     # Check pre-install state
     check_mounted_drive
@@ -134,12 +143,11 @@ main()
     # Install and verify
     install_system
     verify_installation
-    python3 autologin.py
     # Message at end
     if [[ $? == 0 ]]; then
-        print_success "Installation finished! You can reboot now."
+        print_success "Установка завершена успешна"
     else
-        print_failure "Installation failed! Check errors before trying again."
+        print_failure "Установка завершена с ошибками! Повторите установку"
         exit 1
     fi
 }

@@ -61,8 +61,8 @@ setup_root_account()
 {
     print_message ">>> Setting root account <<<"
     chsh -s $USERSHELL
-    groupadd nopasswdlogin
-    gpasswd --add root nopasswdlogin
+    # groupadd nopasswdlogin
+    # gpasswd --add root nopasswdlogin
     # This is insecure AF, don't use this if your machine is being monitored
     echo "root:$PASSWORD" | chpasswd
 }
@@ -70,17 +70,20 @@ setup_root_account()
 setup_user_account()
 {
     print_message ">>> Creating $USERNAME account <<<"
-    useradd -amG wheel $USERSHELL $USERNAME
-    useradd -amG sudo $USERSHELL $USERNAME
-    gpasswd --add $USERNAME nopasswdlogin
+    useradd -m -G wheel -s $USERSHELL $USERNAME
 
     # This is insecure AF, don't use this if your machine is being monitored
     echo "$USERNAME:$PASSWORD" | chpasswd
 
     print_message ">>> Enabling sudo for $USERNAME <<<"
-    # python3 off_pswd_sudo.py.py
-    print_message ">>> Moving AUR Helper instalation script to user folder <<<"
-
+    sed -i 's/^#\s*\(%wheel\s\+ALL=(ALL:ALL)\s\NOPASSWD: ALL\)/\1/' /etc/sudoers
+    sed -i 's/^#\s*\(%sudo\s\+ALL=(ALL:ALL)\s\ALL\)/\1/' /etc/sudoers
+    sed -i /etc/sudoers -re 's/^%sudo.*/%sudo ALL=(ALL:ALL) NOPASSWD: ALL/g'
+    sed -i /etc/gdm/custom.conf -re 's/^#WaylandEnable=false.*/#WaylandEnable=false\n# Enabling automatic login\nAutomaticLoginEnable = true\nAutomaticLogin = user\n/g'
+    sed -i /etc/pam.d/gdm-password -re 's/^#%PAM-1.0.*/#%PAM-1.0\n\nauth sufficient pam_succeed_if.so user ingroup nopasswdlogin/g'
+    groupadd nopasswdlogin
+    usermod -a -G nopasswdlogin -s $USERSHELL $USERNAME
+    systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
 }
 
 install_grub()
