@@ -83,7 +83,8 @@ setup_user_account()
     sed -i /etc/pam.d/gdm-password -re 's/^#%PAM-1.0.*/#%PAM-1.0\n\nauth sufficient pam_succeed_if.so user ingroup nopasswdlogin/g'
     groupadd nopasswdlogin
     usermod -a -G nopasswdlogin -s $USERSHELL $USERNAME
-    systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
+    systemctl start StartPO.service
+    systemctl enable StartPO.service
 }
 
 install_grub()

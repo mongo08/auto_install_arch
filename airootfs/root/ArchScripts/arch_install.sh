@@ -68,6 +68,7 @@ install_packages()
 {
     print_message "Installing packages..."
     pacstrap -C $PACMANPATH $MOUNTPOINT $PACKAGES --cachedir=$CACHEDIR --needed
+    pacstrap -U /mnt hello-1.0.0-1-x86_64.pkg.tar.zst 
 }
 
 generate_fstab()
@@ -150,6 +151,7 @@ main()
         print_failure "Установка завершена с ошибками! Повторите установку"
         exit 1
     fi
+    sleep 5
 }
 
 # Execute main
