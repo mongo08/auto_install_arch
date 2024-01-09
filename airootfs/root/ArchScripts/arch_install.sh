@@ -67,8 +67,8 @@ select_video_drivers()
 install_packages()
 {
     print_message "Installing packages..."
-    pacstrap -C $PACMANPATH $MOUNTPOINT $PACKAGES --cachedir=$CACHEDIR --needed
-    pacstrap -U /mnt hello-1.0.0-1-x86_64.pkg.tar.zst 
+    pacstrap -C $PACMANPATH $MOUNTPOINT $PACKAGES --cachedir=$CACHEDIR --needed 
+    # pacstrap -U /mnt disableHotKey-1.0.0-1-x86_64.pkg.tar.zst
 }
 
 generate_fstab()
@@ -136,6 +136,8 @@ mount_disk()
 
 main()
 {
+    pacman-key --init
+    pacman-key --populate archlinux
     setfont cyr-sun16
     mount_disk
     # Check pre-install state

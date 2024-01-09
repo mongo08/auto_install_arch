@@ -1,6 +1,6 @@
 ESSENTIAL="man-db man-pages pacman-contrib"
 #кустом пакеты
-DEVELOPMENT="base-devel git gedit"
+DEVELOPMENT="base-devel git gedit boost openssh"
 DISKMGM="e2fsprogs dosfstools ntfs-3g"
 CONSOLE="nano grml-zsh-config"
 MULTIMEDIA="gstreamer alsa-utils mpv"

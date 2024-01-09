@@ -1,1 +1,1 @@
-RECIPE_PKGS="xorg-twm xorg-xclock xterm"
+RECIPE_PKGS="xorg-twm xorg-server xorg-apps xterm xorg-xinit gdm "

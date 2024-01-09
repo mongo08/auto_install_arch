@@ -50,15 +50,15 @@ make_database() {
     echo "Creating package database..."
 
     n=0
-
     # If the command didn't run correctly, re-run. It solves the file-not-found error. Go figure.
     # We'll re-run the command up to 5 times.
-    until [ $n -ge 5 ]
-    do
-        repo-add -R -n ${custom_pkg_dir}/custom.db.tar.gz ${custom_pkg_dir}/*pkg.tar.{xz,zst} && break  # If command ran ok, don't re-run
-        n=$[$n+1]
-        sleep 1
-    done
+    repo-add ${custom_pkg_dir}/custom.db.tar.gz ${custom_pkg_dir}/*.pkg.tar.zst
+    # until [ $n -ge 5 ]
+    # do
+    #     repo-add -R -n ${custom_pkg_dir}/custom.db.tar.gz ${custom_pkg_dir}/*.pkg.tar.{xz,zst} && break  # If command ran ok, don't re-run
+    #     n=$[$n+1]
+    #     sleep 1
+    # done
 }
 
 # Make local pkg database and repo only if needed
